@@ -4,3 +4,4 @@ flask-bcrypt>=1.0.1
 flask-limiter>=3.5.0
 pyotp>=2.9.0
 qrcode[pil]>=7.4.2
+gunicorn>=21.2.0
