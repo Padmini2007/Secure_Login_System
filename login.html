@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Sign In — SecureVault{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <!-- Shield hero -->
+    <div class="card-hero">
+      <div class="shield-container">
+        <div class="shield-pulse"></div>
+        <div class="shield-glyph">⬡</div>
+      </div>
+      <h1 class="card-title">SecureVault</h1>
+      <p class="card-subtitle">Protected access portal</p>
+    </div>
+
+    {% if errors %}
+      <div class="error-box">
+        {% for e in errors %}<p>{{ e }}</p>{% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('login') }}" novalidate>
+      <div class="field-group">
+        <label for="identifier">Username or Email</label>
+        <div class="input-wrap">
+          <span class="input-icon">◈</span>
+          <input type="text" id="identifier" name="identifier"
+                 placeholder="Enter username or email"
+                 autocomplete="username" required>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="password">Password</label>
+        <div class="input-wrap">
+          <span class="input-icon">◉</span>
+          <input type="password" id="password" name="password"
+                 placeholder="Enter your password"
+                 autocomplete="current-password" required>
+          <button type="button" class="toggle-pw" onclick="togglePassword('password')">👁</button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary">
+        <span class="btn-text">Access Vault</span>
+        <span class="btn-arrow">→</span>
+      </button>
+    </form>
+
+    <div class="card-footer">
+      <span>No account?</span>
+      <a href="{{ url_for('register') }}">Create one →</a>
+    </div>
+  </div>
+
+  <div class="auth-meta">
+    <span class="meta-badge">🔒 256-bit encrypted</span>
+    <span class="meta-badge">⚡ Bcrypt hashed</span>
+    <span class="meta-badge">🛡 CSRF protected</span>
+  </div>
+</div>
+{% endblock %}

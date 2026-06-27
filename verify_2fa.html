@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Verify 2FA — SecureVault{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="card-hero">
+      <div class="shield-container">
+        <div class="shield-pulse"></div>
+        <div class="shield-glyph">🛡</div>
+      </div>
+      <h1 class="card-title">Two-Factor Auth</h1>
+      <p class="card-subtitle">Enter your authenticator code</p>
+    </div>
+
+    {% if errors %}
+      <div class="error-box">{% for e in errors %}<p>{{ e }}</p>{% endfor %}</div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('verify_2fa') }}" novalidate>
+      <div class="field-group">
+        <label for="totp_code">Authentication Code</label>
+        <div class="input-wrap">
+          <span class="input-icon">⬡</span>
+          <input type="text" id="totp_code" name="totp_code"
+                 placeholder="000 000" maxlength="6"
+                 pattern="\d{6}" autocomplete="one-time-code"
+                 class="mono-input" autofocus required>
+        </div>
+        <p class="hint-text">Open your authenticator app and enter the 6-digit code.</p>
+      </div>
+
+      <button type="submit" class="btn-primary">
+        <span class="btn-text">Verify & Enter</span>
+        <span class="btn-arrow">→</span>
+      </button>
+    </form>
+
+    <div class="card-footer">
+      <a href="{{ url_for('login') }}">← Back to login</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

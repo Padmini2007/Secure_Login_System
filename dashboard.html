@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — SecureVault{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+  <div class="dash-header">
+    <div class="dash-greeting">
+      <div class="greeting-badge">SECURE SESSION</div>
+      <h1>Welcome, <span class="accent">{{ user.username }}</span></h1>
+      <p class="dash-sub">Your vault is active and secured</p>
+    </div>
+    <div class="status-indicator">
+      <div class="pulse-dot"></div>
+      <span>Live</span>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon">◈</div>
+      <div class="stat-info">
+        <span class="stat-label">Account</span>
+        <span class="stat-value">{{ user.username }}</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">◎</div>
+      <div class="stat-info">
+        <span class="stat-label">Email</span>
+        <span class="stat-value">{{ user.email }}</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🛡</div>
+      <div class="stat-info">
+        <span class="stat-label">2FA Status</span>
+        <span class="stat-value {% if user.two_fa_enabled %}text-green{% else %}text-amber{% endif %}">
+          {% if user.two_fa_enabled %}Enabled{% else %}Disabled{% endif %}
+        </span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🔒</div>
+      <div class="stat-info">
+        <span class="stat-label">Password</span>
+        <span class="stat-value">Bcrypt hashed</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="security-panel">
+    <div class="panel-title">
+      <span class="panel-icon">⬡</span>
+      Security Settings
+    </div>
+
+    <div class="security-row">
+      <div class="security-item">
+        <div class="sec-icon {% if user.two_fa_enabled %}active{% endif %}">
+          {% if user.two_fa_enabled %}✓{% else %}⚠{% endif %}
+        </div>
+        <div class="sec-info">
+          <strong>Two-Factor Authentication</strong>
+          <p>{% if user.two_fa_enabled %}Your account has an extra layer of protection via TOTP.{% else %}Add a second layer of protection with an authenticator app.{% endif %}</p>
+        </div>
+        <div class="sec-action">
+          {% if user.two_fa_enabled %}
+            <form method="POST" action="{{ url_for('disable_2fa') }}" onsubmit="return confirm('Disable 2FA?')">
+              <button type="submit" class="btn-danger">Disable 2FA</button>
+            </form>
+          {% else %}
+            <a href="{{ url_for('setup_2fa') }}" class="btn-secondary">Enable 2FA</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="security-row">
+      <div class="security-item">
+        <div class="sec-icon active">✓</div>
+        <div class="sec-info">
+          <strong>Session Management</strong>
+          <p>Your session expires automatically after 30 minutes of inactivity.</p>
+        </div>
+        <div class="sec-action">
+          <a href="{{ url_for('logout') }}" class="btn-secondary">End Session</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="security-note">
+    <span class="note-icon">ℹ</span>
+    All passwords are hashed with Bcrypt. Sessions are cookie-secured and expire after inactivity.
+  </div>
+</div>
+{% endblock %}
